@@ -1618,13 +1618,23 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#050714}
 .bxCol .bxColHead{flex:0 0 auto}
 .bxCol .bxCard{flex:1 1 0;min-height:0}
 .bxLogo{height:74px}
+
+/* ---- v67: visitor counter, top-right of the cover slide -------------- */
+.viewCount{position:absolute;right:30px;top:52px;display:flex;align-items:center;gap:8px;
+  padding:6px 13px 6px 11px;border-radius:999px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);
+  backdrop-filter:blur(6px);color:#c9d3f0}
+.viewCount svg{width:19px;height:19px;color:var(--cyan);flex:0 0 auto}
+.viewCount b{font:700 18px 'Space Grotesk',sans-serif;color:#eaf1ff;letter-spacing:.01em}
+.viewCount span{font:600 12px 'Space Grotesk',sans-serif;letter-spacing:.12em;
+  text-transform:uppercase;color:#8f98bc}
 </style>
 </head>
 <body>
 <div id="stage">
 <div class="deck" id="deck">
 <section class="slide active">
-<div class="corner">IMMERSIVE MEDIA CLASS</div>
+<div class="corner">IMMERSIVE MEDIA CLASS</div><div class="viewCount" id="viewCount" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1.7 12S5.4 5.2 12 5.2 22.3 12 22.3 12 18.6 18.8 12 18.8 1.7 12 1.7 12Z"/><circle cx="12" cy="12" r="3.2"/></svg><b id="viewNum">–</b><span>views</span></div>
 <div class="slideBody"><div class="heroSlide">
 <div class="heroText">
 <div class="kicker reveal">ELECTIVE CLASS</div>
@@ -5829,6 +5839,31 @@ function ftApply(){
     }
   }
 }
+
+
+/* ---------- visitor counter (GoatCounter) ----------
+   ใส่โค้ดไซต์ของคุณตรง GC_CODE เช่น ถ้า dashboard คือ
+   https://ginolecture.goatcounter.com ให้ใส่ 'ginolecture'
+   ถ้ายังไม่ได้ตั้ง ตัวเลขจะซ่อนไว้เฉย ๆ ไม่ขึ้นอะไรบนสไลด์               */
+const GC_CODE = 'MYCODE';
+(function views(){
+  const online = location.protocol === 'http:' || location.protocol === 'https:';
+  if(GC_CODE === 'MYCODE' || !online) return;          /* เปิดจากไฟล์ตรง ๆ ก็ไม่ต้องนับ */
+
+  const t = document.createElement('script');           /* ตัวนับ 1 ครั้งต่อการเปิดหน้า */
+  t.async = true; t.src = 'https://gc.zgo.at/count.js';
+  t.setAttribute('data-goatcounter', 'https://' + GC_CODE + '.goatcounter.com/count');
+  document.body.appendChild(t);
+
+  fetch('https://' + GC_CODE + '.goatcounter.com/counter/TOTAL.json')
+    .then(r => r.ok ? r.json() : Promise.reject(r.status))
+    .then(d => {
+      const box = document.getElementById('viewCount');
+      document.getElementById('viewNum').textContent = d.count;   /* มี , คั่นหลักมาแล้ว */
+      if(box) box.hidden = false;
+    })
+    .catch(() => {});                                   /* เน็ตล่ม/adblock → ไม่ต้องโชว์ */
+})();
 
 /* ---------- boot ---------- */
 progressEl.style.width = `${1/slides.length*100}%`;
