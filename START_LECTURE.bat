@@ -20,8 +20,8 @@ if not exist "index.html" (
 
 REM ---- pick a runtime: py -3, python, then node -------------------------
 set "RUN="
-py -3 --version >nul 2>&1 && set "RUN=py -3 -m http.server %PORT% --bind 127.0.0.1"
-if not defined RUN python --version >nul 2>&1 && set "RUN=python -m http.server %PORT% --bind 127.0.0.1"
+py -3 --version >nul 2>&1 && set "RUN=py -3 serve.py %PORT%"
+if not defined RUN python --version >nul 2>&1 && set "RUN=python serve.py %PORT%"
 if not defined RUN if exist "server.js" node --version >nul 2>&1 && set "RUN=node server.js %PORT%"
 
 if not defined RUN (
