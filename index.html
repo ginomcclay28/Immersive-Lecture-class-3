@@ -1622,13 +1622,39 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#050714}
 /* ---- v67: visitor counter, top-right of the cover slide -------------- */
 .viewBadge{position:absolute;right:30px;top:54px;height:30px;display:block;
   border-radius:8px;opacity:.95}
+
+/* ================= v68 — live camera tracking demo ===================== */
+.camSlide .title{font-size:52px;max-width:none;white-space:nowrap;line-height:1.05;letter-spacing:-.03em}
+.camStage{position:relative;flex:1 1 auto;min-height:0;height:auto;background:#04060e}
+#camVideo,#camCanvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+#camVideo{object-fit:cover;transform:scaleX(-1);opacity:.70;filter:saturate(.9)}
+#camCanvas{pointer-events:none}
+.camHud{position:absolute;left:18px;top:16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  padding:10px 14px;border-radius:16px;background:rgba(6,9,22,.78);
+  border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(8px)}
+.camHud .action{margin:0;padding:9px 18px;font:700 15.5px Anuphan,system-ui,sans-serif}
+.camHud .action.live{background:#ff4fa3;border-color:#ff4fa3;color:#fff}
+.camGrp{display:flex;align-items:center;gap:7px}
+.camGrp>span{font:600 12.5px 'Space Grotesk',sans-serif;letter-spacing:.1em;
+  text-transform:uppercase;color:#8f98bc;margin-right:2px}
+.camPick{padding:8px 14px;border-radius:11px;cursor:pointer;
+  border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.05);color:#dbe4ff;
+  font:600 15px Anuphan,system-ui,sans-serif;transition:.15s}
+.camPick:hover{background:rgba(255,255,255,.1)}
+.camPick.on{background:rgba(57,223,248,.2);border-color:var(--cyan);color:#bff3ff}
+.camOp{width:132px;accent-color:var(--cyan);cursor:pointer}
+.camOpVal{font:700 14px 'Space Grotesk',sans-serif;color:#bff3ff;min-width:42px;text-align:right}
+.camPick.off{opacity:.5}
+.camStat{position:absolute;left:18px;bottom:14px;padding:8px 14px;border-radius:11px;
+  font-size:15px;color:#dbe4ff;background:rgba(6,9,22,.72);border:1px solid rgba(255,255,255,.12)}
+.camStat b{color:var(--lime)}
 </style>
 </head>
 <body>
 <div id="stage">
 <div class="deck" id="deck">
 <section class="slide active">
-<div class="corner">IMMERSIVE MEDIA CLASS</div><img class="viewBadge" id="viewBadge" alt="" hidden/>
+<div class="corner">IMMERSIVE MEDIA CLASS</div><img alt="" class="viewBadge" hidden="" id="viewBadge"/>
 <div class="slideBody"><div class="heroSlide">
 <div class="heroText">
 <div class="kicker reveal">ELECTIVE CLASS</div>
@@ -2155,7 +2181,31 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#050714}
 </div>
 </div>
 </div></div><div class="note">สำหรับนักศึกษานิเทศฯ นี่คือข้อได้เปรียบที่สุด — <b>คิดเป็นภาพและความสัมพันธ์</b> ได้เลย โดยไม่ต้องข้ามกำแพงไวยากรณ์ของภาษาโปรแกรมก่อน</div></div></section>
-<section class="slide"><div class="kicker">INTERACTIVE PARTICLES</div><h2 class="title">ขยับเมาส์ แล้วดูระบบตอบสนอง</h2><div class="slideBody"><div class="mappingStage"><canvas id="particleCanvas"></canvas></div><p class="small">แนวคิดเดียวกันนี้สามารถเปลี่ยน Input จากเมาส์เป็นกล้อง, LiDAR, OSC, MIDI หรือข้อมูลออนไลน์</p></div></section><section class="slide"><div class="kicker">MINI LIVE DEMO</div><h2 class="title">ตำแหน่งเมาส์ = Input · Particle = Output</h2><div class="slideBody"><div class="mappingStage"><canvas id="mlCanvas"></canvas></div><p class="small">ถ้ายังไม่ได้เปิด TouchDesigner จริง ใช้สไลด์นี้แทนได้ — logic เดียวกันเป๊ะ: รับตำแหน่ง Input แล้ววาดภาพ Output แบบเรียลไทม์ ปล่อยมือไว้เฉย ๆ ระบบจะวิ่งเองเป็นวงรี</p></div></section><section class="slide sttSlide">
+<section class="slide"><div class="kicker">INTERACTIVE PARTICLES</div><h2 class="title">ขยับเมาส์ แล้วดูระบบตอบสนอง</h2><div class="slideBody"><div class="mappingStage"><canvas id="particleCanvas"></canvas></div><p class="small">แนวคิดเดียวกันนี้สามารถเปลี่ยน Input จากเมาส์เป็นกล้อง, LiDAR, OSC, MIDI หรือข้อมูลออนไลน์</p></div></section><section class="slide"><div class="kicker">MINI LIVE DEMO</div><h2 class="title">ตำแหน่งเมาส์ = Input · Particle = Output</h2><div class="slideBody"><div class="mappingStage"><canvas id="mlCanvas"></canvas></div><p class="small">ถ้ายังไม่ได้เปิด TouchDesigner จริง ใช้สไลด์นี้แทนได้ — logic เดียวกันเป๊ะ: รับตำแหน่ง Input แล้ววาดภาพ Output แบบเรียลไทม์ ปล่อยมือไว้เฉย ๆ ระบบจะวิ่งเองเป็นวงรี</p></div></section><section class="slide camSlide">
+<div class="kicker">LIVE CAMERA · REAL TRACKING</div>
+<h2 class="title">กล้องจริง อัลกอริทึมจริง — ขยับตัวแล้วภาพตอบสนอง</h2>
+<div class="slideBody">
+<div class="mappingStage camStage">
+<video id="camVideo" muted="" playsinline=""></video>
+<canvas id="camCanvas"></canvas>
+<div class="camHud">
+<button class="action camGo" id="camBtn" onclick="camToggle()">เปิดกล้อง</button>
+<div class="camGrp"><span>อัลกอริทึม</span>
+<button class="camPick on" id="camA-body" onclick="camAlgo('body')">Body</button>
+<button class="camPick" id="camA-skeleton" onclick="camAlgo('skeleton')">Skeleton</button>
+<button class="camPick" id="camA-hand" onclick="camAlgo('hand')">Hand</button><button class="camPick" id="camA-face" onclick="camAlgo('face')">Face</button>
+</div>
+<div class="camGrp"><span>เอฟเฟกต์</span>
+<button class="camPick on" id="camF-repel" onclick="camFx('repel')">ผลัก + ระเบิด</button>
+<button class="camPick" id="camF-spray" onclick="camFx('spray')">พ่นสี</button>
+</div>
+<div class="camGrp"><button class="camPick on" id="camVisBtn" onclick="camVis()">ภาพกล้อง</button><input class="camOp" id="camOp" type="range" min="0" max="100" value="70" oninput="camSetOp(this.value)"/><b class="camOpVal" id="camOpVal">70%</b></div>
+</div>
+<div class="camStat" id="camStat">กดเปิดกล้อง แล้วอนุญาตให้เบราว์เซอร์ใช้กล้อง</div>
+</div>
+<p class="small">นี่คือระบบเดียวกับสไลด์ 39–40 ทุกอย่าง ต่างกันแค่ <b>Input</b> — เปลี่ยนจากเมาส์เป็นร่างกายจริงที่กล้องมองเห็น ส่วน Process กับ Output เหมือนเดิมทั้งหมด</p>
+</div>
+</section><section class="slide sttSlide">
 <div class="kicker">SPEECH TO TEXT · PHYSICS</div>
 <h2 class="title">พูดใส่ไมค์ แล้วคำที่พูดกลายเป็นวัตถุจริง</h2>
 <div class="slideBody">
@@ -5852,6 +5902,339 @@ const HIT_ID = '';
   img.src = 'https://hits.sh/' + key + '.svg'
           + '?label=views&bgLeft=0e1530&bgRight=39dff8&color=0a0f1e&border=round';
 })();
+
+
+/* ---------- slide 41: real camera + MediaPipe tracking + particles ----------
+   Body/Skeleton ใช้ PoseLandmarker (33 จุด) · Hand ใช้ HandLandmarker (21 จุด/มือ)
+   จุดที่ตรวจได้จะกลายเป็น "เมาส์" ที่ไปกวน particle แทนการใช้เมาส์จริง        */
+const CAM_CDN   = 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision';
+const CAM_MODEL = {
+  pose: 'https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task',
+  hand: 'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task',
+  face: 'https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/1/blaze_face_short_range.tflite'
+};
+let camCtx = null, camRun = false, camRAF = 0, camOn = false, camStream = null;
+let camVision = null, camPose = null, camHand = null, camFace = null, camBusy = false, camLastT = -1;
+let camAlgoCur = 'body', camFxCur = 'repel';
+let camPts = [], camBox = null, camBones = [], camHead = null;   /* ผลลัพธ์ล่าสุด */
+let camFist = [], camFistWas = [], camBurst = [];               /* สถานะกำ/แบมือ */
+let camP = [], camSeeded = false, camSpray = [], camFps = 0, camFrames = 0, camT0 = 0;
+
+const camSay = m => { const e = document.getElementById('camStat'); if(e) e.innerHTML = m; };
+function camAlgo(k){
+  camAlgoCur = k;
+  ['body','skeleton','hand','face'].forEach(x =>
+    document.getElementById('camA-'+x)?.classList.toggle('on', x === k));
+  camPts = []; camBox = null; camBones = []; camHead = null; camFist = []; camFistWas = [];
+  if(camOn) camLoad();                       /* สลับโมเดลถ้าจำเป็น */
+}
+function camFx(k){
+  camFxCur = k;
+  ['repel','spray'].forEach(x =>
+    document.getElementById('camF-'+x)?.classList.toggle('on', x === k));
+  if(k === 'repel'){ camSpray.length = 0; camSeed(true); } else { camP.length = 0; }
+}
+window.camAlgo = camAlgo; window.camFx = camFx;
+
+let camShow = true, camOpacity = .70;
+function camApplyOp(){
+  const v = document.getElementById('camVideo');
+  if(v) v.style.opacity = camShow ? camOpacity : 0;
+  const b2 = document.getElementById('camVisBtn');
+  if(b2){ b2.classList.toggle('on', camShow); b2.classList.toggle('off', !camShow);
+          b2.textContent = camShow ? 'ภาพกล้อง' : 'ซ่อนอยู่'; }
+}
+function camVis(){ camShow = !camShow; camApplyOp(); }
+function camSetOp(v){
+  camOpacity = (+v)/100; camShow = true;
+  const t = document.getElementById('camOpVal'); if(t) t.textContent = Math.round(+v) + '%';
+  camApplyOp();
+}
+window.camVis = camVis; window.camSetOp = camSetOp;
+
+/* ---------- โหลดโมเดลตามอัลกอริทึมที่เลือก ---------- */
+async function camLoad(){
+  const need = camAlgoCur === 'hand' ? 'hand' : camAlgoCur === 'face' ? 'face' : 'pose';
+  if({hand:camHand, face:camFace, pose:camPose}[need]) return;
+  try{
+    camSay('กำลังโหลดโมเดล… (ครั้งแรกใช้เวลาสักครู่)');
+    if(!camVision){
+      const V = await import(CAM_CDN + '/vision_bundle.mjs');
+      camVision = { M: V, files: await V.FilesetResolver.forVisionTasks(CAM_CDN + '/wasm') };
+    }
+    const { M, files } = camVision;
+    if(need === 'hand'){
+      camHand = await M.HandLandmarker.createFromOptions(files, {
+        baseOptions:{ modelAssetPath: CAM_MODEL.hand, delegate:'GPU' },
+        runningMode:'VIDEO', numHands:2 });
+    } else if(need === 'face'){
+      camFace = await M.FaceDetector.createFromOptions(files, {
+        baseOptions:{ modelAssetPath: CAM_MODEL.face, delegate:'GPU' },
+        runningMode:'VIDEO' });
+    } else {
+      camPose = await M.PoseLandmarker.createFromOptions(files, {
+        baseOptions:{ modelAssetPath: CAM_MODEL.pose, delegate:'GPU' },
+        runningMode:'VIDEO', numPoses:1 });
+    }
+    camSay('พร้อมแล้ว — <b>ขยับตัวหน้ากล้อง</b>');
+  }catch(err){
+    camSay('โหลดโมเดลไม่สำเร็จ (ต้องต่อเน็ต) — ' + (err.message || err));
+  }
+}
+
+/* ---------- เปิด/ปิดกล้อง ---------- */
+async function camToggle(){
+  const btn = document.getElementById('camBtn');
+  const v = document.getElementById('camVideo');
+  if(camOn){
+    camOn = false;
+    camStream?.getTracks().forEach(t => t.stop()); camStream = null;
+    v.srcObject = null; btn.textContent = 'เปิดกล้อง'; btn.classList.remove('live');
+    camPts = []; camBox = null; camBones = [];
+    camSay('ปิดกล้องแล้ว'); return;
+  }
+  if(!/^https?:$/.test(location.protocol)){
+    camSay('เปิดจากไฟล์ตรง ๆ ใช้กล้องไม่ได้ — ดับเบิลคลิก <b>START_LECTURE.bat</b> แล้วเปิดผ่าน localhost'); return;
+  }
+  try{
+    camSay('กำลังขอสิทธิ์กล้อง…');
+    camStream = await navigator.mediaDevices.getUserMedia({
+      video:{ width:{ideal:1280}, height:{ideal:720}, facingMode:'user' }, audio:false });
+    v.srcObject = camStream; await v.play();
+    camOn = true; btn.textContent = 'ปิดกล้อง'; btn.classList.add('live');
+    camT0 = performance.now(); camFrames = 0;
+    camLoad();
+  }catch(err){
+    camSay('เปิดกล้องไม่ได้ — ' + (err.name === 'NotAllowedError' ? 'เบราว์เซอร์ไม่อนุญาต ลองกดไอคอนแม่กุญแจข้าง URL' : (err.message||err)));
+  }
+}
+window.camToggle = camToggle;
+
+/* ---------- ตรวจจับหนึ่งเฟรม ---------- */
+function camDetect(v, w, h){
+  if(camBusy) return;
+  const now = performance.now();
+  const model = camAlgoCur === 'hand' ? camHand : camAlgoCur === 'face' ? camFace : camPose;
+  if(!model || v.currentTime === camLastT) return;
+  camLastT = v.currentTime; camBusy = true;
+  try{
+    const res = model.detectForVideo(v, now);
+    const pts = [], bones = [];
+    /* ภาพถูกมิเรอร์ไว้ พิกัด x จึงต้องกลับด้านให้ตรงกับที่ตาเห็น */
+    const P = (l) => [ (1 - l.x) * w, l.y * h ];
+    const D = (p, q) => Math.hypot(p[0]-q[0], p[1]-q[1]);
+    camHead = null; camBox = null;
+
+    if(camAlgoCur === 'hand'){
+      const fists = [];
+      (res.landmarks || []).forEach((hand, hi) => {
+        const wrist = P(hand[0]), mcp = P(hand[9]);
+        const span  = D(wrist, mcp) || 1;
+        /* กำมือ = ปลายนิ้วหดเข้าใกล้ข้อมือกว่าปกติ */
+        const reach = [8,12,16,20].reduce((a2,i) => a2 + D(P(hand[i]), wrist), 0) / 4;
+        const closed = reach / span < 1.55;
+        fists[hi] = closed;
+        const palm = [(wrist[0]+mcp[0])/2, (wrist[1]+mcp[1])/2];
+        if(closed) pts.push(palm);                       /* กำ = จุดเดียวตรงกลางฝ่ามือ */
+        else [4,8,12,16,20,0].forEach(i => hand[i] && pts.push(P(hand[i])));
+        const L = camVision.M.HandLandmarker.HAND_CONNECTIONS || [];
+        L.forEach(c => bones.push([P(hand[c.start]), P(hand[c.end])]));
+      });
+      camFist = fists;
+    } else if(camAlgoCur === 'face'){
+      (res.detections || []).forEach(d => {
+        const kp = (d.keypoints || []).map(P);
+        if(!kp.length) return;
+        kp.forEach(p => pts.push(p));
+        const xs = kp.map(p => p[0]), ys = kp.map(p => p[1]);
+        const cx2 = (Math.min(...xs)+Math.max(...xs))/2, cy2 = (Math.min(...ys)+Math.max(...ys))/2;
+        const r = Math.max(Math.max(...xs)-Math.min(...xs), Math.max(...ys)-Math.min(...ys)) * 0.95;
+        camHead = [cx2, cy2, r, null];                   /* ใช้วงกลมเดียวกับโหมด skeleton */
+      });
+    } else {
+      const lm = (res.landmarks || [])[0];
+      if(lm){
+        if(camAlgoCur === 'skeleton'){
+          /* จุด 0–10 คือใบหน้า ไม่เอามาวาด ใช้เป็นวงกลมหัวแทน */
+          lm.forEach((l, i) => { if(i > 10 && (l.visibility ?? 1) > .5) pts.push(P(l)); });
+          const L = camVision.M.PoseLandmarker.POSE_CONNECTIONS || [];
+          L.forEach(c => { if(c.start > 10 && c.end > 10)
+            bones.push([P(lm[c.start]), P(lm[c.end])]); });
+          const earL = P(lm[7]), earR = P(lm[8]), nose = P(lm[0]);
+          const hc = [(earL[0]+earR[0])/2, (earL[1]+earR[1])/2];
+          const r  = Math.max(D(earL, earR) * 0.72, 18);
+          const neck = [(P(lm[11])[0]+P(lm[12])[0])/2, (P(lm[11])[1]+P(lm[12])[1])/2];
+          camHead = [hc[0] || nose[0], hc[1] || nose[1], r, neck];
+          pts.push([camHead[0], camHead[1]]);            /* หัวก็เป็นจุด interact ด้วย */
+        } else {
+          const xs = lm.map(l => (1-l.x)*w), ys = lm.map(l => l.y*h);
+          camBox = [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)];
+          pts.push([(camBox[0]+camBox[2])/2, (camBox[1]+camBox[3])/2]);
+        }
+      }
+    }
+    camPts = pts; camBones = bones;
+  }catch(e){ /* เฟรมเดียวพลาดไม่เป็นไร */ }
+  camBusy = false;
+}
+
+/* ---------- เอฟเฟกต์ 1: สนาม particle ที่ถูกผลัก (เหมือนสไลด์ 39) ---------- */
+function camSeed(force){
+  const c = document.getElementById('camCanvas');
+  const w = c.clientWidth, h = c.clientHeight;
+  if(!w || !h) return;
+  if(camSeeded && !force) return;
+  camP = Array.from({length:1400}, () => ({
+    x:Math.random()*w, y:Math.random()*h, vx:0, vy:0, s:1+Math.random()*2,
+    held:null, cool:0, ha:Math.random()*Math.PI*2, hr:Math.sqrt(Math.random()) }));
+  camSeeded = true;
+}
+function camDrawRepel(ctx, w, h, t){
+  ctx.clearRect(0,0,w,h);        /* โปร่งใส เพื่อให้เห็นภาพกล้องด้านหลัง */
+  const R = 190, GRAB = 210;
+  /* มือที่กำอยู่ = ตัวดูด · มือที่เพิ่งปล่อย = ระเบิด (เหมือนสไลด์ 39) */
+  const grabbing = camAlgoCur === 'hand'
+    ? camPts.filter((_, i) => camFist[i]) : [];
+  camFist.forEach((now, i) => {
+    if(camFistWas[i] && !now && camPts[i]){          /* กำ → ปล่อย */
+      const c = camPts[i]; let n = 0;
+      camP.forEach(p => { if(p.held !== i) return;
+        p.held = null; p.cool = .5;
+        let dx = p.x-c[0], dy = p.y-c[1], d = Math.hypot(dx,dy);
+        if(d < .6){ const a2 = Math.random()*Math.PI*2; dx = Math.cos(a2); dy = Math.sin(a2); d = 1; }
+        const k = (3.4 + Math.min(26, n*0.055)) * (.55 + Math.random()*.9);
+        p.vx = dx/d*k; p.vy = dy/d*k; n++;
+      });
+      if(n) camBurst.push({ x:c[0], y:c[1], t:0, n });
+    }
+  });
+  camFistWas = camFist.slice();
+
+  const ball = 9 + 1.9*Math.sqrt(Math.max(1, camP.filter(p => p.held != null).length));
+  const spin = t*1.1;
+  camP.forEach((p, i) => {
+    if(p.cool > 0) p.cool -= 1/60;
+    if(p.held != null && grabbing.length){
+      const c = camPts[p.held] || grabbing[0];
+      const tx = c[0] + Math.cos(p.ha+spin)*p.hr*ball;
+      const ty = c[1] + Math.sin(p.ha+spin)*p.hr*ball;
+      p.vx += (tx-p.x)*.30; p.vy += (ty-p.y)*.30; p.vx *= .62; p.vy *= .62;
+    } else {
+      if(p.held != null) p.held = null;
+      camPts.forEach(([mx,my], hi) => {
+        const dx = p.x-mx, dy = p.y-my, d = Math.hypot(dx,dy)+.1;
+        if(camFist[hi]){                               /* กำ = ดูดเข้า */
+          if(d < GRAB && (p.cool||0) <= 0){
+            const pull = (1 - d/GRAB)*1.35 + .35;
+            p.vx -= dx/d*pull; p.vy -= dy/d*pull;
+            if(d < ball + 26){ p.held = hi; p.ha = Math.random()*Math.PI*2; p.hr = Math.sqrt(Math.random()); }
+          }
+        } else if(d < R){                              /* แบ = ผลักออก */
+          p.vx += dx/d*(R-d)*.007; p.vy += dy/d*(R-d)*.007;
+        }
+      });
+      p.vx += Math.sin(p.y*.02+i)*.006; p.vy += Math.cos(p.x*.02+i)*.006;
+      p.vx *= .97; p.vy *= .97;
+    }
+    p.x += p.vx; p.y += p.vy;
+    if(p.x < 0) p.x = w; if(p.x > w) p.x = 0;
+    if(p.y < 0) p.y = h; if(p.y > h) p.y = 0;
+    ctx.beginPath(); ctx.arc(p.x, p.y, p.held != null ? p.s*1.25 : p.s, 0, Math.PI*2);
+    ctx.fillStyle = p.held != null ? `hsla(${52+(i%40)},100%,72%,.95)`
+                                   : `hsla(${185+i%110},90%,65%,.8)`;
+    ctx.fill();
+  });
+
+  grabbing.forEach(c => {                              /* วงแหวนตอนกำ */
+    ctx.strokeStyle = 'rgba(255,240,120,.5)'; ctx.lineWidth = 2;
+    ctx.setLineDash([5,6]);
+    ctx.beginPath(); ctx.arc(c[0], c[1], GRAB, 0, Math.PI*2); ctx.stroke();
+    ctx.setLineDash([]);
+  });
+  camBurst = camBurst.filter(b2 => {                   /* คลื่นกระแทกตอนปล่อย */
+    b2.t += 1/60; const f = b2.t/0.55;
+    if(f >= 1) return false;
+    ctx.strokeStyle = `rgba(255,220,120,${(1-f)*.75})`;
+    ctx.lineWidth = 5*(1-f)+1;
+    ctx.beginPath(); ctx.arc(b2.x, b2.y, 14 + f*(110 + Math.min(420, b2.n*1.1)), 0, Math.PI*2);
+    ctx.stroke(); return true;
+  });
+}
+
+/* ---------- เอฟเฟกต์ 2: พ่นสีตามจุดที่ track ได้ (เหมือนสไลด์ 40) ---------- */
+function camDrawSpray(ctx, w, h, t){
+  ctx.globalCompositeOperation = 'destination-out';   /* เฟดหางแบบไม่ถมสีดำ */
+  ctx.fillStyle = 'rgba(0,0,0,.18)'; ctx.fillRect(0,0,w,h);
+  ctx.globalCompositeOperation = 'source-over';
+  camPts.forEach(([x,y]) => {
+    for(let i = 0; i < 4; i++)
+      camSpray.push({ x, y, vx:(Math.random()-.5)*4, vy:(Math.random()-.5)*4,
+                      life:1, size:4+Math.random()*12, h:Math.random()*360 });
+  });
+  if(camSpray.length > 900) camSpray.splice(0, camSpray.length-900);
+  camSpray.forEach(p => { p.x += p.vx; p.y += p.vy; p.vy += .01; p.life *= .975; p.size *= .99; });
+  camSpray = camSpray.filter(p => p.life > .04);
+  for(const p of camSpray){
+    ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+    ctx.fillStyle = `hsla(${p.h},92%,62%,${p.life})`; ctx.fill();
+  }
+}
+/* ---------- วาดผลการ track ทับลงไป ---------- */
+function camDrawTrack(ctx, t){
+  if(camBox){
+    const [x0,y0,x1,y1] = camBox;
+    ctx.strokeStyle = '#39dff8'; ctx.lineWidth = 3; ctx.setLineDash([12,8]);
+    ctx.strokeRect(x0, y0, x1-x0, y1-y0); ctx.setLineDash([]);
+    ctx.fillStyle = '#39dff8'; ctx.font = '700 16px "Space Grotesk", sans-serif';
+    ctx.fillText('BODY', x0, y0-10);
+  }
+  if(camHead){
+    const [hx, hy, r, neck] = camHead;
+    if(neck){ ctx.strokeStyle = 'rgba(199,255,75,.85)'; ctx.lineWidth = 3; ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.moveTo(hx, hy + r*0.9); ctx.lineTo(neck[0], neck[1]); ctx.stroke(); }
+    ctx.strokeStyle = '#c7ff4b'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.arc(hx, hy, r, 0, Math.PI*2); ctx.stroke();
+    ctx.fillStyle = '#c7ff4b';
+    ctx.beginPath(); ctx.arc(hx, hy, 5, 0, Math.PI*2); ctx.fill();
+  }
+  if(camBones.length){
+    ctx.strokeStyle = 'rgba(199,255,75,.85)'; ctx.lineWidth = 3; ctx.lineCap = 'round';
+    camBones.forEach(([a,b]) => { ctx.beginPath(); ctx.moveTo(a[0],a[1]); ctx.lineTo(b[0],b[1]); ctx.stroke(); });
+  }
+  camPts.forEach(([x,y]) => {
+    ctx.beginPath(); ctx.arc(x, y, 9, 0, Math.PI*2);
+    ctx.fillStyle = 'rgba(255,255,255,.92)'; ctx.fill();
+    ctx.beginPath(); ctx.arc(x, y, 20 + Math.sin(t*6)*4, 0, Math.PI*2);
+    ctx.strokeStyle = 'rgba(255,79,163,.75)'; ctx.lineWidth = 2; ctx.stroke();
+  });
+}
+function camDraw(){
+  if(!camRun) return;
+  const c = document.getElementById('camCanvas'), v = document.getElementById('camVideo');
+  const cx = sizeCanvas(c); if(cx) camCtx = cx;
+  const ctx = camCtx, w = c.clientWidth, h = c.clientHeight;
+  if(!ctx || !w || !h){ camRAF = requestAnimationFrame(camDraw); return; }
+  const t = performance.now()/1000;
+  camSeed(false);
+  if(camOn && v.readyState >= 2) camDetect(v, w, h);
+
+  (camFxCur === 'repel' ? camDrawRepel : camDrawSpray)(ctx, w, h, t);
+  camDrawTrack(ctx, t);
+
+  if(camOn && ++camFrames % 20 === 0){
+    camFps = Math.round(camFrames / ((performance.now()-camT0)/1000));
+    const n = camPts.length;
+    const tip = camAlgoCur === 'hand' ? ' · <b>กำมือ = ดูด, ปล่อย = ระเบิด</b>' : '';
+    camSay(n ? `กำลัง track: <b>${n} จุด</b> · ${camFps} fps · ${camAlgoCur}${tip}`
+             : `ยังไม่เจอคน — ถอยห่างกล้องให้เห็นตัวมากขึ้น · ${camFps} fps`);
+  }
+  camRAF = requestAnimationFrame(camDraw);
+}
+onSlide('#camCanvas', {
+  enter(){ camSeed(true); camApplyOp(); if(camRun) return; camRun = true; camDraw(); },
+  leave(){ camRun = false; cancelAnimationFrame(camRAF);
+           if(camOn) camToggle();  }                /* ออกจากสไลด์ = ปิดกล้องเสมอ */
+});
 
 /* ---------- boot ---------- */
 progressEl.style.width = `${1/slides.length*100}%`;
